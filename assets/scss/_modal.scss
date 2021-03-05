@@ -1,0 +1,97 @@
+@import "mixins";
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #3A3A3C;
+  background: rgba(58, 58, 60, .9);
+
+  & .modal {
+    position: relative;
+    padding: 24px 131px 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #201E23;
+
+    &__title {
+      @include font-base(18px, 700, 27px);
+
+      margin-bottom: 32px;
+      letter-spacing: 0.16em;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    &-body {
+      position: relative;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+
+      & input {
+        @include font-base(18px, 400, 23px, normal, 'Yantramanav');
+
+        width: 224px;
+        margin-right: 16px;
+        padding: 5px 25px 5px 16px;
+        background: #3A3A3C;
+        border: none;
+        outline: none;
+        color: white;
+
+        &::placeholder {
+          color: #777678;
+        }
+
+        &[type="number"] {
+          -webkit-appearance: textfield;
+          -moz-appearance: textfield;
+          appearance: textfield;
+
+          &::-webkit-inner-spin-button,
+          ::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+          }
+        }
+      }
+
+      &__button {
+        @include font-base(12px, 700, 18px);
+
+        width: 106px;
+        padding: 7.4px 0;
+        background: #ED5A24;
+      }
+    }
+
+    &-close {
+      position: absolute;
+      top: 0;
+      right: -28px;
+      display: flex;
+      cursor: pointer;
+    }
+  }
+}
+
+.arrows {
+  position: absolute;
+  left: 195px;
+}
+span {
+  display: flex;
+  outline: none;
+  cursor: pointer;
+
+  &.top-arrow {
+    margin-bottom: 6px;
+  }
+}

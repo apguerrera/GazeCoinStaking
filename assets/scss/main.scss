@@ -1,0 +1,252 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yantramanav&display=swap');
+
+@import "mixins";
+@import "modal";
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 4px grey;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ED5A24;
+  border-radius: 10px;
+  transition: hover 1s ease-in;
+
+  &:hover {
+    transition: hover 1s ease-in;
+    background: #f34808;
+  }
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Kanit', sans-serif;
+}
+.body {
+  width: 100%;
+  min-height: 100vh;
+  background: #100F11;
+}
+.header {
+  position: relative;
+  width: 100%;
+  padding: 17px 0 21px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  &-logo {
+    display: flex;
+  }
+  &-coin {
+    position: absolute;
+    left: calc(50% - 59px);
+    bottom: -36px;
+    z-index: 100;
+    display: flex;
+  }
+  &-connection button {
+    @include font-base(12px, 700, 18px);
+
+    padding: 7px 11px;
+    background: #ED5A24;
+  }
+}
+
+.btn {
+  border: none;
+  letter-spacing: 0.16em;
+  color: white;
+  outline: none;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.main {
+  width: 100%;
+  padding-bottom: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;justify-content: center;
+
+  &-image {
+    position: relative;
+    margin-bottom: 54px;
+    display: flex;
+  }
+
+  &-title {
+    position: absolute;
+    left: calc(50% - 305px);
+    bottom: -24px;
+    display: flex;
+
+    & svg {
+      & path {
+        fill: transparent;
+      }
+
+      &:nth-child(1) {
+        z-index: 10;
+        opacity: 1;
+
+        & path {
+          fill: white;
+        }
+      }
+
+      &:nth-child(2) {
+        position: absolute;
+        bottom: 21px;
+        z-index: 9;
+        stroke: #ED5A24;
+        opacity: .9;
+      }
+      &:nth-child(3) {
+        position: absolute;
+        bottom: 43px;
+        z-index: 8;
+        stroke: #ED5A24;
+        opacity: .7;
+      }
+      &:nth-child(4) {
+        position: absolute;
+        bottom: 64px;
+        z-index: 7;
+        stroke: #ED5A24;
+        opacity: .5;
+      }
+    }
+  }
+
+  &-text {
+    @include font-base(18px, 400, 23px, normal, 'Yantramanav');
+
+    width: 50%;
+    margin-bottom: 64px;
+    text-align: center;
+    color: #D4D4D4;
+  }
+}
+
+.cards-wrapper {
+  display: flex;
+  justify-content: center;
+  & .card:first-child {
+    margin-right: 32px;
+  }
+}
+
+.card {
+  width: 28%;
+  display: flex;
+  flex-direction: column;
+
+  &-header {
+
+    &__title {
+      @include font-base(24px, 900, 30px);
+
+      margin-bottom: 2px;
+      letter-spacing: 0.02em;
+      text-align: center;
+      color: white;
+    }
+    &__subtitle {
+      @include font-base(15px, 400, 19px, normal, 'Yantramanav');
+
+      margin-bottom: 16px;
+      text-align: center;
+      color: white;
+    }
+    &__text {
+      @include font-base(18px, 400, 23px, normal, 'Yantramanav');
+
+      margin-bottom: 24px;
+      text-align: center;
+      color: #D4D4D4;
+    }
+  }
+}
+
+.card-wrapper {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &.stake {
+    background: rgba(237, 90, 36, .15);
+  }
+  &.claim {
+    margin-bottom: 47px;
+    background: #201E23;
+
+    & .button {
+      background: #D4D4D4;
+      color: white;
+    }
+  }
+
+  &__uppertitle {
+    @include font-base(12px, 700, 18px);
+
+    margin-bottom: 16px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #D4D4D4;
+  }
+
+  &__title {
+    @include font-base(18px, 700, 27px);
+
+    margin-bottom: 32px;
+    letter-spacing: 0.16em;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  &__subtitle {
+    @include font-base(18px, 400, 23px, normal, 'Yantramanav');
+
+    margin-bottom: 24px;
+    color: #D4D4D4;
+  }
+
+  & .button {
+    @include font-base(12px, 700, 18px);
+
+    width: 160px;
+    padding: 7px 0;
+    background: #ED5A24;
+  }
+}
+
+.links {
+  transform: translateX(19px);
+}
+
+.link {
+  @include font-base(12px, 700, 18px);
+
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #D4D4D4;
+
+  &:first-child {
+    margin-right: 44px;
+  }
+}

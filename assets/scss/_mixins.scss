@@ -1,0 +1,9 @@
+@mixin font-base(
+  $size: 14px,
+  $font-weight: 400,
+  $height: 0,
+  $font-style: normal,
+  $font-family: 'Kanit'
+) {
+  font: $font-weight $font-style #{$size}/#{$height $font-family};
+}

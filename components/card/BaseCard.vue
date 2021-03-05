@@ -2,25 +2,39 @@
   <div class="card">
     <div class="card-header">
       <h2 class="card-header__title">
-        Stake Genesis NFTs
+        {{ card.title }}
       </h2>
-      <p class="card-header__suptitle">
-        (Film characters)
+      <p class="card-header__subtitle">
+        {{ card.subtitle }}
       </p>
       <p class="card-header__text">
-        Introduction to staking Genesis NFTs, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+        {{ card.text }}
       </p>
     </div>
 
+    <stake-card />
+    <claim-card />
   </div>
 </template>
 
 <script>
+import ClaimCard from "~/components/card/claim-card/ClaimCard";
+import StakeCard from "~/components/card/stake-card/StakeCard";
 export default {
-  name: 'Base-card'
+  components: {
+    ClaimCard,
+    StakeCard
+  },
+  name: 'BaseCard',
+  props: {
+    card: {
+      type: Object,
+      required: false
+    }
+  }
 }
 </script>
 
-<style scoped>
+<style>
 
 </style>
