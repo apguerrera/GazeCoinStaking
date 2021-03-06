@@ -11,10 +11,15 @@
   "dependencies": {
     "core-js": "^3.8.3",
     "nuxt": "^2.14.12",
-    "sass-loader": "10"
+    "sass-loader": "10",
+    "vue": "^2.6.12"
   },
   "devDependencies": {
     "fibers": "^5.0.0",
-    "sass": "^1.32.8"
+    "sass": "^1.32.8",
+    "sweetalert2": "^10.15.5",
+    "vuex": "^3.1.1",
+    "vuex-class": "^0.3.2",
+    "web3": "^1.2.6"
   }
 }

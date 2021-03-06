@@ -54,11 +54,23 @@
     z-index: 100;
     display: flex;
   }
-  &-connection button {
-    @include font-base(12px, 700, 18px);
+  &-connection {
+    &__wallet {
+      @include font-base(15px, 700, 18px);
 
-    padding: 7px 11px;
-    background: #ED5A24;
+
+      padding: 7px 20px;
+      letter-spacing: 1px;
+      background: #ED5A24;
+      color: white;
+    }
+
+    & button {
+      @include font-base(12px, 700, 18px);
+
+      padding: 7px 11px;
+      background: #ED5A24;
+    }
   }
 }
 
