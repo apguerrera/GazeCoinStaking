@@ -1,5 +1,8 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+	mode: "universal",
+	telemetry: false,
+
   head: {
     title: 'GazeCoin',
     htmlAttrs: {
@@ -11,7 +14,7 @@ export default {
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/gaze.png' }
     ]
   },
 
@@ -39,5 +42,8 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    analyze: false,
+    standalone: true,
+
   }
 }

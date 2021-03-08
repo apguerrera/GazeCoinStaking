@@ -20,7 +20,7 @@
         </div>
       </div>
       <h3 class="main-text">
-        Introduction to staking, ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni rem aperiam, eaque ipsa.
+        GET PAID TO GAZE
       </h3>
 
       <div class="cards-wrapper">
@@ -28,11 +28,11 @@
       </div>
 
       <div class="links">
-        <nuxt-link class="link" to="/">
+        <nuxt-link class="link" to="https://www.gazecoin.io/">
           Staking Rewards
         </nuxt-link>
-        <nuxt-link class="link" to="/">
-          What Are Gaze coins?
+        <nuxt-link class="link" to="https://www.gazecoin.io/">
+          What is GazeCoin?
         </nuxt-link>
       </div>
     </div>

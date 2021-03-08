@@ -6,7 +6,7 @@
     </h5>
 
     <h2 class="card-wrapper__title">
-      {{ '0.000000' }} Dream credits
+      {{ '0.000000' }} GAZE
     </h2>
 
     <button class="button btn">
