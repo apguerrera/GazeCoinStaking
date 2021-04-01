@@ -1,13 +1,12 @@
-import { connect, isRightNetwork } from "@/helpers/web3Provider"
-import networkConfig from "../config/networkConfig"
+/* eslint-disable */
+import { enableAccount, isRightNetwork } from '@/helpers/web3Provider'
+import networkConfig from '@/config/networkConfig'
 
 export const state = () => ({
   loading: true,
-  walletFound: false,
   initialized: false,
-  isInjected: false,
   networkId: null,
-  coinbase: null,
+  account: null,
   rightNetworks: networkConfig.rightNetworks,
   defaultNetworkId: networkConfig.defaultNetwork,
   explorer: {
@@ -15,120 +14,111 @@ export const state = () => ({
     address: null,
     tx: null
   },
-  gasPrice: 0
-});
+})
 
 export const mutations = {
-  INIT_WEB3_INSTANCE: (state, payload) => {
-    const web3Copy = state;
-    web3Copy.initialized = payload.initialized;
-    web3Copy.isInjected = payload.injectedWeb3;
-    web3Copy.walletFound = payload.walletFound;
-    web3Copy.coinbase = payload.coinbase;
+  INIT_ETH_DATA: (state, payload) => {
+    const web3Copy = state
+    web3Copy.initialized = payload.initialized
+    web3Copy.account = payload.account
     if (payload.networkId) {
-      web3Copy.networkId = parseInt(payload.networkId);
+      web3Copy.networkId = parseInt(payload.networkId)
     }
-    state = web3Copy;
+    state = web3Copy
   },
-  SET_COINBASE: (state, account) => {
-    state.coinbase = account;
+  SET_ACCOUNT: (state, account) => {
+    state.account = account
   },
   SET_NETWORK: (state, networkId) => {
-    state.networkId = parseInt(networkId);
+    state.networkId = parseInt(networkId)
   },
   SET_LOADING: (state, loading) => {
-    state.loading = loading;
+    state.loading = loading
   },
   SET_EXPLORER: (state, payload) => {
-    state.explorer = payload;
+    state.explorer = payload
   }
-};
+}
 
 export const actions = {
-  injectWeb3({ commit, state }, payload) {
-    if (!state.isInjected) {
-      commit("INIT_WEB3_INSTANCE", payload);
-      commit("SET_LOADING", false);
+  initialize({ commit, state }, payload) {
+    commit('INIT_ETH_DATA', payload)
+    commit('SET_LOADING', false)
 
-      if (isRightNetwork(state.networkId)) {
-        commit("SET_EXPLORER", networkConfig[state.networkId].explorer);
-      } else {
-        commit("SET_EXPLORER", networkConfig[state.defaultNetworkId].explorer);
-      }
-    }
-
-  },
-
-  async enableAccount({ commit, state }) {
-    console.log('state', state);
-    if (state.isInjected) {
-      if (!state.coinbase) {
-        const account = await connect();
-        console.log(account, 'acccount');
-        commit('SET_COINBASE', account)
-        return true
-      } else {
-        return false;
-      }
+    if (isRightNetwork(state.networkId)) {
+      commit('SET_EXPLORER', networkConfig[state.networkId].explorer)
+    } else {
+      commit('SET_EXPLORER', networkConfig[state.defaultNetworkId].explorer)
     }
   },
 
-  setCoinbase({ commit }, payload) {
-    commit('SET_COINBASE', payload)
+  async connectAccount({ commit, state }) {
+    if (!state.account) {
+      const account = await enableAccount()
+      commit('SET_ACCOUNT', account)
+      return true
+    } else {
+      return false
+    }
   },
 
-  setNetwork({ commit }, networkId) {
-    commit('SET_NETWORK', networkId);
+  setAccount ({ commit }, payload) {
+    commit('SET_ACCOUNT', payload)
   },
 
-  setExplorer({ commit }, payload) {
+  setNetwork ({ commit }, networkId) {
+    commit('SET_NETWORK', networkId)
+  },
+
+  setExplorer ({ commit }, payload) {
     commit('SET_EXPLORER', payload)
-  },
-};
+  }
+}
 
 export const getters = {
   isOk: (state) => {
-    return isRightNetwork(state.networkId) && state.coinbase && state.isInjected ? true : false;
+    return !!(isRightNetwork(state.networkId) && state.account && state.isInjected)
   },
 
   isRightNetwork: (state) => {
-    return isRightNetwork(state.networkId)
-  },
-
-  isInjected: (state) => {
-    return state.isInjected;
+    // return isRightNetwork(state.networkId)
+    return state.networkId === 5
   },
 
   initialized: (state) => {
-    return state.initialized;
+    return state.initialized
   },
 
   rightNetwork: (state) => {
-    return state.rightNetwork;
+    return state.rightNetwork
   },
 
   networkId: (state) => {
-    return state.networkId;
+    return state.networkId
   },
 
   defaultNetworkId: (state) => {
-    return state.defaultNetworkId;
+    return state.defaultNetworkId
   },
 
   currentProvidersNetworkId: (state) => {
     if (isRightNetwork(state.networkId)) {
-      return state.networkId;
+      return state.networkId
     } else {
-      return state.defaultNetworkId;
+      return state.defaultNetworkId
     }
   },
 
-  coinbase: (state) => {
-    return state.coinbase
+  account: (state) => {
+    return state.account
+  },
+
+  accountConnected: (state) => {
+    return state.account !== '' && state.account !== undefined && state.account !== null;
   },
 
   explorer: (state) => {
-    return state.explorer;
+    return state.explorer
   },
 
   txUrl: (state) => {
@@ -136,14 +126,7 @@ export const getters = {
   },
 
   loading: (state) => {
-    return state.loading;
+    return state.loading
   },
 
-  gasPrice: (state) => {
-    return state.gasPrice;
-  },
-
-  walletFound: (state) => {
-    return state.walletFound;
-  }
 }

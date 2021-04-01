@@ -5,7 +5,10 @@
         Zap eth
       </h3>
       <div class="modal-body">
-        <input placeholder="Text" min=0 v-model="inputValue" type="number">
+        <input min=0
+               step="0.1"
+               v-model="inputValue"
+               type="number">
         <div class="arrows">
           <span @click.stop="increase()" class="top-arrow">
             <svg width="10" height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,7 +22,7 @@
           </span>
         </div>
 
-        <button class="modal-body__button btn">
+        <button @click="zapEth()" class="modal-body__button btn">
           Zap eth
         </button>
       </div>
@@ -34,12 +37,30 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import {
+  makeBatchCall as callLpToken,
+} from '@/helpers/contractFunctions/lpToken'
+import {
+  getAddress as getLpStakingAddress,
+  sendTransaction as claimLpRewardSend,
+} from '@/helpers/contractFunctions/lpStaking'
+import { numberToHex, toWei } from '@/helpers/contractFunctions/base'
+
 export default {
   name: 'StakeModal',
   data() {
     return {
-      inputValue: 0
+      inputValue: 0.1,
+      lpTokens: 0,
+      lpBalance: 0,
+      lpTokenAllowance: 0,
     }
+  },
+  computed: {
+    ...mapGetters({
+      account: 'ethereum/account'
+    })
   },
   methods: {
     decrease() {
@@ -55,7 +76,29 @@ export default {
     },
     stopPropogation: function (event) {
       event.stopImmediatePropagation();
-    }
+    },
+    async zapEth() {
+      const zapEthValueInWei = toWei(this.inputValue)
+      // const receipt = await claimLpRewardSend('addLiquidityETHOnly', [this.account], { from: this.account, value: numberToHex(`${zapEthValueInWei}`) })
+      const receipt = await claimLpRewardSend('zapEth', [], { from: this.account, value: numberToHex(`${zapEthValueInWei}`) })
+
+      if (receipt) {
+        await this.getLpTokenData()
+        this.showZapEthPopup = false
+      }
+    },
+    async getLpTokenData () {
+      const methods = [
+        { methodName: 'balanceOf', args: [this.account] },
+        { methodName: 'allowance', args: [this.account, getLpStakingAddress()] }
+      ];
+      [
+        this.lpTokens,
+        this.lpTokenAllowance
+      ] = await callLpToken(methods)
+      console.log('lpTokens', this.lpTokens)
+      console.log('lpTokensAllowance', this.lpTokenAllowance)
+    },
   }
 }
 </script>

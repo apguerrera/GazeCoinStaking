@@ -1,27 +1,28 @@
-import networkConfig from "../config/networkConfig";
+/* eslint-disable */
+import networkConfig from '../config/networkConfig'
 
-const rightNetworks = networkConfig.rightNetworks;
+const rightNetworks = networkConfig.rightNetworks
 
 export const getAccount = () =>
   new Promise(async resolve => {
     await web3.eth.getAccounts((err, accounts) => {
       if (err) {
-        resolve(false);
+        resolve(false)
       } else {
-        resolve(accounts[0]);
+        resolve(accounts[0])
       }
-    });
-  });
+    })
+  })
 
 export const getNetwork = () => {
   return new Promise(resolve => {
-    let networkId = window.ethereum.networkVersion || window.ethereum.chainId;
+    const networkId = window.ethereum.networkVersion || window.ethereum.chainId
     if (!networkId) {
       setTimeout(() => {
         return resolve(getNetwork())
       }, 2000)
     } else {
-      return resolve(networkId);
+      return resolve(networkId)
     }
   })
 }
@@ -31,33 +32,33 @@ export const getNetworkOldVersion = async () =>
     if (web3.version.getNetwork) {
       web3.version.getNetwork((err, chainId) => {
         if (!err) {
-          resolve(chainId);
+          resolve(chainId)
         } else {
-          resolve(false);
+          resolve(false)
         }
-      });
+      })
     } else {
       web3.eth.getChainId((err, chainId) => {
         if (!err) {
-          resolve(chainId);
+          resolve(chainId)
         } else {
-          resolve(false);
+          resolve(false)
         }
-      });
+      })
     }
-  });
+  })
 
-export const connect = async () => {
-  var account = null;
+export const enableAccount = async () => {
+  let account = null
   try {
-    const accounts = await window.ethereum.enable();
-    account = accounts[0];
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+    account = accounts[0]
   } catch (error) {
-    console.log('error on connecting account', error);
+    console.log('error on connecting account', error)
   }
-  return account;
+  return account
 }
 
 export const isRightNetwork = (networkId) => {
-  return rightNetworks.includes(parseInt(networkId));
+  return rightNetworks.includes(parseInt(networkId))
 }

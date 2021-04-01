@@ -14,13 +14,19 @@
     <h3 class="card-wrapper__subtitle">
     </h3>
     <stake-modal @closeModal="closeModal()" v-if="isModalOpen" />
-    <button class="button btn">
+    <button @click="stakeLpToken()" class="button btn">
       stake
     </button>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import {
+  makeBatchCall as callLpStaking,
+  sendTransaction as claimLpRewardSend,
+  getAddress as getLpStakingAddress
+} from '@/helpers/contractFunctions/lpStaking'
 import StakeModal from "~/components/modal/StakeModal";
 export default {
   components: {
@@ -32,12 +38,21 @@ export default {
       isModalOpen: false
     }
   },
+  computed: {
+    ...mapGetters({
+      account: 'ethereum/account'
+    })
+  },
   methods: {
     openModal() {
       this.isModalOpen = true;
     },
     closeModal() {
       this.isModalOpen = false;
+    },
+    async stakeLpToken() {
+      const res = await claimLpRewardSend('stakeAll', [], { from: this.account })
+      console.log(res)
     }
   }
 }

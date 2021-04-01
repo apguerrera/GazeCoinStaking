@@ -24,7 +24,7 @@ export default {
   name: 'BaseHeader',
   computed: {
     ...mapGetters({
-      coinbase: "ethereum/coinbase"
+      coinbase: "ethereum/account"
     }),
     shortenedAddress() {
       return this.coinbase.slice(0, 6).concat('...').concat(this.coinbase.slice(-6));
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      enableAccount: "ethereum/enableAccount"
+      enableAccount: "ethereum/connectAccount"
     }),
     async connectAccount() {
 
