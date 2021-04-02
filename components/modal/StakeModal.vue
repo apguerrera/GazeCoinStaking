@@ -77,9 +77,9 @@ export default {
   },
   async mounted() {
     await this.getLpStakingData()
-    await this.getLpTokenData()
-    const unixtime = Math.floor(Date.now() / 1000)
-    await this.getRewardsData(unixtime, unixtime + (24 * 60 * 60))
+    // await this.getLpTokenData()
+    // const unixtime = Math.floor(Date.now() / 1000)
+    // await this.getRewardsData(unixtime, unixtime + (24 * 60 * 60))
   },
   methods: {
     async getRewardsData (fromTime, toTime) {
@@ -93,6 +93,7 @@ export default {
         this.rewardsModel.parentRewardRate,
         this.rewardsModel.lpRewardRate
       ] = await callRewardsContract(methods)
+      console.log('this.rewardsModel', this.rewardsModel);
     },
     decrease() {
       if(+this.inputValue > 0) {
@@ -132,6 +133,7 @@ export default {
         this.lpStakingModel.rewards,
         this.lpStakingModel.lastUpdateTime
       ] = await callLpStaking(methods)
+      console.log('this.lpStakingModel', this.lpStakingModel);
     },
     async getLpTokenData () {
       const methods = [

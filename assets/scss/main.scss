@@ -55,21 +55,21 @@
     display: flex;
   }
   &-connection {
-    &__wallet {
-      @include font-base(15px, 700, 18px);
-
-
-      padding: 7px 20px;
-      letter-spacing: 1px;
-      background: #ED5A24;
-      color: white;
-    }
-
     & button {
       @include font-base(12px, 700, 18px);
 
       padding: 7px 11px;
       background: #ED5A24;
+
+      &.wallet {
+        @include font-base(15px, 700, 18px);
+
+
+        padding: 7px 20px;
+        letter-spacing: 1px;
+        background: #ED5A24;
+        color: white;
+      }
     }
   }
 }

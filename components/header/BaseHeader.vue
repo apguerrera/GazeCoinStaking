@@ -7,11 +7,12 @@
       <img src="../../assets/images/coin.png" alt="coin">
     </div>
     <div class="header-connection">
-      <div v-if="coinbase" class="header-connection__wallet">
-        {{ shortenedAddress }}
-      </div>
-      <button v-else @click="connectAccount()" class="btn">
-         Connect wallet
+      <button @click="!account ? connectAccount() : null"
+              :class="{
+                'wallet': !!account
+              }"
+              class="btn">
+        {{ account ? shortenedAddress : 'Connect wallet' }}
       </button>
     </div>
   </header>
@@ -24,10 +25,10 @@ export default {
   name: 'BaseHeader',
   computed: {
     ...mapGetters({
-      coinbase: "ethereum/account"
+      account: "ethereum/account"
     }),
     shortenedAddress() {
-      return this.coinbase.slice(0, 6).concat('...').concat(this.coinbase.slice(-6));
+      return this.account.slice(0, 6).concat('...').concat(this.account.slice(-6));
     }
   },
   methods: {
