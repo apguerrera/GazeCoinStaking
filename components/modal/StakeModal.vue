@@ -22,7 +22,7 @@
           </span>
         </div>
 
-        <button @click="zapEth()" class="modal-body__button btn">
+        <button @click="zapEth" class="modal-body__button btn">
           Zap eth
         </button>
       </div>
@@ -42,10 +42,12 @@ import {
   makeBatchCall as callLpToken,
 } from '@/helpers/contractFunctions/lpToken'
 import {
+  makeBatchCall as callLpStaking,
   getAddress as getLpStakingAddress,
   sendTransaction as claimLpRewardSend,
 } from '@/helpers/contractFunctions/lpStaking'
 import { numberToHex, toWei } from '@/helpers/contractFunctions/base'
+import { makeBatchCall as callRewardsContract } from '@/helpers/contractFunctions/rewardsContract'
 
 export default {
   name: 'StakeModal',
@@ -55,6 +57,17 @@ export default {
       lpTokens: 0,
       lpBalance: 0,
       lpTokenAllowance: 0,
+      lpStakingModel: {
+        rewards: null,
+        balance: 0,
+        stakedEthTotal: null,
+        lastUpdateTime: null
+      },
+      rewardsModel: {
+        genesisRewardRate: 0,
+        parentRewardRate: 0,
+        lpRewardRate: 0
+      },
     }
   },
   computed: {
@@ -62,7 +75,25 @@ export default {
       account: 'ethereum/account'
     })
   },
+  async mounted() {
+    await this.getLpStakingData()
+    await this.getLpTokenData()
+    const unixtime = Math.floor(Date.now() / 1000)
+    await this.getRewardsData(unixtime, unixtime + (24 * 60 * 60))
+  },
   methods: {
+    async getRewardsData (fromTime, toTime) {
+      const methods = [
+        { methodName: 'genesisRewards', args: [fromTime, toTime] },
+        { methodName: 'parentRewards', args: [fromTime, toTime] },
+        { methodName: 'LPRewards', args: [fromTime, toTime] }
+      ];
+      [
+        this.rewardsModel.genesisRewardRate,
+        this.rewardsModel.parentRewardRate,
+        this.rewardsModel.lpRewardRate
+      ] = await callRewardsContract(methods)
+    },
     decrease() {
       if(+this.inputValue > 0) {
         this.inputValue = parseFloat(this.inputValue) - 1;
@@ -87,6 +118,20 @@ export default {
         await this.getLpTokenData()
         this.showZapEthPopup = false
       }
+    },
+    async getLpStakingData () {
+      const methods = [
+        // { methodName: 'stakedEthTotal' },
+        { methodName: 'getStakedBalance', args: [this.account] },
+        { methodName: 'rewardsOwing', args: [this.account] },
+        { methodName: 'lastUpdateTime' }
+      ];
+      [
+        // this.lpStakingModel.stakedEthTotal,
+        this.lpStakingModel.balance,
+        this.lpStakingModel.rewards,
+        this.lpStakingModel.lastUpdateTime
+      ] = await callLpStaking(methods)
     },
     async getLpTokenData () {
       const methods = [
