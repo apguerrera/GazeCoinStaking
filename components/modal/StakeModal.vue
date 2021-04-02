@@ -81,6 +81,7 @@ export default {
       const zapEthValueInWei = toWei(this.inputValue)
       // const receipt = await claimLpRewardSend('addLiquidityETHOnly', [this.account], { from: this.account, value: numberToHex(`${zapEthValueInWei}`) })
       const receipt = await claimLpRewardSend('zapEth', [], { from: this.account, value: numberToHex(`${zapEthValueInWei}`) })
+      console.log('receipt', receipt)
 
       if (receipt) {
         await this.getLpTokenData()

@@ -88,7 +88,7 @@ const handleChainChanged = (chainId) => {
 
 const handleAccountsChanged = (accounts) => {
   if (accounts.length !== 0 && accounts[0] !== localStore.state.coinbase) {
-    localStore.dispatch("ethereum/setCoinbase", accounts[0]);
+    localStore.dispatch("ethereum/setAccount", accounts[0]);
   }
 }
 
