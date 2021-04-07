@@ -1,12 +1,12 @@
 /* eslint-disable */
-import { lp_staking } from '@/config/contractConfig'
+import { lpStaking } from '@/config/contractConfig'
 import { sendTransaction as _sendTransaction, makeBatchCall as _makeBatchCall } from "./base";
 
 let contractInstance
 
 const initContractInstance = () => {
   if (!contractInstance || web3.currentProvider.isMetaMask !== contractInstance.currentProvider.isMetaMask) {
-    contractInstance = new web3.eth.Contract(lp_staking.abi, lp_staking.address[5])
+    contractInstance = new web3.eth.Contract(lpStaking.abi, lpStaking.address[3])
   }
 }
 
@@ -14,7 +14,10 @@ export const sendTransaction = async (methodName, args, options) => {
   console.log(methodName, args, options)
   initContractInstance();
   const method = contractInstance.methods[methodName](...args)
-  return await _sendTransaction(method, options)
+  console.log('method', method);
+  const trans = await _sendTransaction(method, options)
+  console.log(trans);
+  // return await _sendTransaction(method, options)
 }
 
 export const makeBatchCall = async (methods) => {

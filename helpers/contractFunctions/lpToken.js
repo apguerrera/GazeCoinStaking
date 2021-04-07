@@ -6,7 +6,7 @@ let contractInstance
 
 const initContractInstance = () => {
   if (!contractInstance || web3.currentProvider.isMetaMask !== contractInstance.currentProvider.isMetaMask) {
-    contractInstance = new web3.eth.Contract(lp_token.abi, lp_token.address[5])
+    contractInstance = new web3.eth.Contract(lp_token.abi, lp_token.address[3])
   }
 }
 

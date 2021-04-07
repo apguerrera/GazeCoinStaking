@@ -77,15 +77,13 @@ export default {
   },
   async mounted() {
     await this.getLpStakingData()
-    // await this.getLpTokenData()
-    // const unixtime = Math.floor(Date.now() / 1000)
-    // await this.getRewardsData(unixtime, unixtime + (24 * 60 * 60))
+    await this.getLpTokenData()
+    const unixtime = Math.floor(Date.now() / 1000)
+    await this.getRewardsData(unixtime, unixtime + (24 * 60 * 60))
   },
   methods: {
     async getRewardsData (fromTime, toTime) {
       const methods = [
-        { methodName: 'genesisRewards', args: [fromTime, toTime] },
-        { methodName: 'parentRewards', args: [fromTime, toTime] },
         { methodName: 'LPRewards', args: [fromTime, toTime] }
       ];
       [
@@ -110,8 +108,10 @@ export default {
       event.stopImmediatePropagation();
     },
     async zapEth() {
-      const zapEthValueInWei = toWei(this.inputValue)
-      // const receipt = await claimLpRewardSend('addLiquidityETHOnly', [this.account], { from: this.account, value: numberToHex(`${zapEthValueInWei}`) })
+      const zapEthValueInWei = toWei(parseFloat(this.inputValue))
+      console.log(zapEthValueInWei, 'zapEthValueInWei');
+      console.log(numberToHex(`${zapEthValueInWei}`))
+
       const receipt = await claimLpRewardSend('zapEth', [], { from: this.account, value: numberToHex(`${zapEthValueInWei}`) })
       console.log('receipt', receipt)
 
@@ -121,6 +121,7 @@ export default {
       }
     },
     async getLpStakingData () {
+      console.log('this.lpStakingModel');
       const methods = [
         // { methodName: 'stakedEthTotal' },
         { methodName: 'getStakedBalance', args: [this.account] },

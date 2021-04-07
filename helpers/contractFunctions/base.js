@@ -8,28 +8,28 @@ let alert
 let store
 if (process.browser) {
   window.onNuxtReady(({
-    $alert,
     $store
   }) => {
-    alert = $alert
+    console.log($store);
     store = $store
   })
 }
 
 export const sendTransaction = async (method, options) => {
   return new Promise(async (resolve, reject) => {
+    console.log(store);
 
     const accountConnected = store.getters['ethereum/accountConnected']
     const isRightNetwork = store.getters['ethereum/isRightNetwork']
-
+    console.log(accountConnected, isRightNetwork)
     if (!accountConnected) {
-      alert('Account not connected. Please check your connection or try re-connecting your wallet. ', 'Notification', {
+      console.log('Account not connected. Please check your connection or try re-connecting your wallet. ', 'Notification', {
         confirmButtonText: 'OK',
         confirmButtonClass: 'confirm-button',
       })
       return resolve(false)
     } else if(!isRightNetwork) {
-      alert('Wrong network. Please change your network to goerli testnet. ', 'Notification', {
+      console.log('Wrong network. Please change your network to goerli testnet. ', 'Notification', {
         confirmButtonText: 'OK',
         confirmButtonClass: 'confirm-button',
       })
@@ -37,13 +37,13 @@ export const sendTransaction = async (method, options) => {
     }
 
     const gasPriceInWei = await getGasPrice();
-    // const estimatedGas = await estimateGas(method, options.from, gasPriceInWei * 20);
-
+    const estimatedGas = await estimateGas(method, options.from, gasPriceInWei * 20);
+    //
     Object.assign(options, {
-      gasPrice: toHex(gasPriceInWei)
-      // gasLimit: estimatedGas,
+      gasPrice: toHex(gasPriceInWei),
+      gasLimit: estimatedGas,
     })
-
+    //
     await method.send(options)
       .on('sending', (sending) => {})
       .on('receipt', (receipt) => {
@@ -53,7 +53,7 @@ export const sendTransaction = async (method, options) => {
         if (error.code === 4001) {
           resolve()
         } else {
-          alert('The transaction failed. Please check your connection or try re-connecting your wallet. ', 'Notification', {
+          console.log('The transaction failed. Please check your connection or try re-connecting your wallet. ', 'Notification', {
             confirmButtonText: 'OK',
             confirmButtonClass: 'confirm-button',
             callback: action => {
