@@ -9,15 +9,30 @@
       {{ '0.000000' }} GAZE
     </h2>
 
-    <button class="button btn">
+    <button @click="claimLpRewards()" class="button btn">
       claim
     </button>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import {
+  sendTransaction as lpStakingTransactions
+} from '@/helpers/contractFunctions/lpStaking'
 export default {
-  name: 'ClaimCard'
+  name: 'ClaimCard',
+  computed: {
+    ...mapGetters({
+      account: 'ethereum/account'
+    })
+  },
+  methods: {
+    async claimLpRewards() {
+      const claimResult = await lpStakingTransactions('claimReward', [this.account], { from: this.account })
+      console.log(claimResult, 'claimResult');
+    }
+  }
 }
 </script>
 
