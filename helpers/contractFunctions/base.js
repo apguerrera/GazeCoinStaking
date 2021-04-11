@@ -37,11 +37,11 @@ export const sendTransaction = async (method, options) => {
     }
 
     const gasPriceInWei = await getGasPrice();
-    // const estimatedGas = await estimateGas(method, options.from, gasPriceInWei * 20);
+    const estimatedGas = await estimateGas(method, options.from, gasPriceInWei * 20);
     //
     Object.assign(options, {
       gasPrice: toHex(gasPriceInWei),
-      // gasLimit: estimatedGas,
+      gasLimit: estimatedGas,
     })
     //
     await method.send(options)
@@ -111,33 +111,18 @@ export const makeBatchRequest = (calls, callFrom) => {
  * @return array - contract methods info
  */
 export const makeBatchCall = async (contractInstance, methods) => {
-  const result = []
-  await Promise.all(
-    methods.map(async (method) => {
-      let methodToCall
-      if (method.args) {
-        methodToCall = contractInstance.methods[method.methodName].apply(null, method.args)
-      } else {
-        methodToCall = contractInstance.methods[method.methodName]
-      }
-
-      const response = await methodToCall.call(method.opts)
-      result.push(response)
-    })
-  )
-  return result
-  // let result = [];
-  // for (const method of methods) {
-  //   let methodToCall;
-  //   if (method.args) {
-  //     methodToCall = contractInstance.methods[method.methodName].apply(null, method.args);
-  //   } else {
-  //     methodToCall = contractInstance.methods[method.methodName]();
-  //   }
-  //   const response = await methodToCall.call(method.opts);
-  //   result.push(response);
-  // }
-  // return result;
+  let result = [];
+  for (const method of methods) {
+    let methodToCall;
+    if (method.args) {
+      methodToCall = contractInstance.methods[method.methodName].apply(null, method.args);
+    } else {
+      methodToCall = contractInstance.methods[method.methodName]();
+    }
+    const response = await methodToCall.call(method.opts);
+    result.push(response);
+  }
+  return result;
 }
 
 const estimateGas = (method, from, gas) => {
