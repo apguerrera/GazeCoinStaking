@@ -1,12 +1,13 @@
 /* eslint-disable */
 import { rewards } from '@/config/contractConfig'
-import { sendTransaction as _sendTransaction, makeBatchCall as _makeBatchCall } from "./base";
+import { sendTransaction as _sendTransaction, makeBatchCall as _makeBatchCall, getNetworkId } from "./base";
 
 let contractInstance
 
 const initContractInstance = () => {
   if (!contractInstance || web3.currentProvider.isMetaMask !== contractInstance.currentProvider.isMetaMask) {
-    contractInstance = new web3.eth.Contract(rewards.abi, rewards.address[3])
+    const address = rewards.address[getNetworkId()];
+    contractInstance = new web3.eth.Contract(rewards.abi, address)
   }
 }
 
