@@ -81,8 +81,8 @@ export const getters = {
   },
 
   isRightNetwork: (state) => {
-    // return isRightNetwork(state.networkId)
-    return state.networkId === 3
+    return isRightNetwork(state.networkId)
+    // return state.networkId === 3
   },
 
   initialized: (state) => {
