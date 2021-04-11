@@ -1,13 +1,12 @@
 /* eslint-disable */
 import { lp_token } from '@/config/contractConfig'
-import { sendTransaction as _sendTransaction, makeBatchCall as _makeBatchCall, getNetworkId } from "./base";
+import { sendTransaction as _sendTransaction, makeBatchCall as _makeBatchCall } from "./base";
 
 let contractInstance
 
 const initContractInstance = () => {
   if (!contractInstance || web3.currentProvider.isMetaMask !== contractInstance.currentProvider.isMetaMask) {
-    const address = lp_token.address[getNetworkId()];
-    contractInstance = new web3.eth.Contract(lp_token.abi, address)
+    contractInstance = new web3.eth.Contract(lp_token.abi, lp_token.address[3])
   }
 }
 
