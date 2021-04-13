@@ -135,7 +135,7 @@ export const makeBatchCall = async (contractInstance, methods) => {
           method.args
         );
       } else {
-        methodToCall = contractInstance.methods[method.methodName];
+        methodToCall = contractInstance.methods[method.methodName]();
       }
 
       const response = await methodToCall.call(method.opts);
