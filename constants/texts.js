@@ -1,9 +1,9 @@
 export const cards = [
   {
     title: 'Stake GazeCoin Liquidity',
-    subtitle: '(UniswapV2 LP Tokens)',
+    subtitle: '(SushiSwap LP Tokens)',
     id: 1,
-    text: 'GazeCoin Liquidity mining contract is giving away 100 GAZE per hour for 6 months. To earn your share, lock up GazeCoin LP tokens from Uniswap, or Zap ETH into LP tokens directly.',
+    text: 'GazeCoin Liquidity mining contract is giving away up to 1 MILLION GAZE over 24 months. To earn your share, lock up GazeCoin SLP tokens from SushiSwap, or Zap ETH into LP tokens and autostake.',
   },
   {
     title: 'Stake Metaverses NFTs',
