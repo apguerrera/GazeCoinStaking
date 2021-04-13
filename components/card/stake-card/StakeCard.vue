@@ -1,7 +1,7 @@
 <template>
   <div class="card-wrapper stake">
     <h2 class="card-wrapper__title">
-      Current APY {{ 459.1 }}%
+      Current APY {{ (apyModel.lpDaily *365 / 10 **18).toFixed(2) }} %
     </h2>
 
     <h4 class="card-wrapper__subtitle">
@@ -30,6 +30,7 @@ import {
   sendTransaction as claimLpRewardSend,
   getAddress as getLpStakingAddress
 } from '@/helpers/contractFunctions/lpStaking'
+import { makeBatchCall as callRewardsContract } from '@/helpers/contractFunctions/rewardsContract'
 import StakeModal from "~/components/modal/StakeModal";
 
 export default {
@@ -41,6 +42,9 @@ export default {
     return {
       isModalOpen: false,
       lpTokens: 0,
+      apyModel: {
+        lpDaily: 0
+      },
     }
   },
   computed: {
@@ -67,7 +71,15 @@ export default {
       [
         this.lpTokens
       ] = await callLpToken(methods)
-    }
+    }, 
+    async getAPYData () {
+      const methods = [
+        { methodName: 'getLpDailyAPY' }
+      ];
+      [
+        this.apyModel.lpDaily
+      ] = await callRewardsContract(methods)
+    },
   }
 }
 </script>
