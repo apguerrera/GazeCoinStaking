@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Yantramanav&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Yantramanav&display=swap");
 
 @import "mixins";
 @import "modal";
@@ -15,7 +15,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ED5A24;
+  background: #ed5a24;
   border-radius: 10px;
   transition: hover 1s ease-in;
 
@@ -29,12 +29,12 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: 'Kanit', sans-serif;
+  font-family: "Kanit", sans-serif;
 }
 .body {
   width: 100%;
   min-height: 100vh;
-  background: #100F11;
+  background: #100f11;
 }
 .header {
   position: relative;
@@ -59,15 +59,14 @@
       @include font-base(12px, 700, 18px);
 
       padding: 7px 11px;
-      background: #ED5A24;
+      background: #ed5a24;
 
       &.wallet {
         @include font-base(15px, 700, 18px);
 
-
         padding: 7px 20px;
         letter-spacing: 1px;
-        background: #ED5A24;
+        background: #ed5a24;
         color: white;
       }
     }
@@ -82,6 +81,10 @@
   text-align: center;
   text-transform: uppercase;
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.4;
+  }
 }
 
 .main {
@@ -89,7 +92,8 @@
   padding-bottom: 70px;
   display: flex;
   flex-direction: column;
-  align-items: center;justify-content: center;
+  align-items: center;
+  justify-content: center;
 
   &-image {
     position: relative;
@@ -126,33 +130,33 @@
         position: absolute;
         bottom: 21px;
         z-index: 9;
-        stroke: #ED5A24;
-        opacity: .9;
+        stroke: #ed5a24;
+        opacity: 0.9;
       }
       &:nth-child(3) {
         position: absolute;
         bottom: 43px;
         z-index: 8;
-        stroke: #ED5A24;
-        opacity: .7;
+        stroke: #ed5a24;
+        opacity: 0.7;
       }
       &:nth-child(4) {
         position: absolute;
         bottom: 64px;
         z-index: 7;
-        stroke: #ED5A24;
-        opacity: .5;
+        stroke: #ed5a24;
+        opacity: 0.5;
       }
     }
   }
 
   &-text {
-    @include font-base(18px, 400, 23px, normal, 'Yantramanav');
+    @include font-base(18px, 400, 23px, normal, "Yantramanav");
 
     width: 50%;
     margin-bottom: 64px;
     text-align: center;
-    color: #D4D4D4;
+    color: #d4d4d4;
   }
 }
 
@@ -170,7 +174,6 @@
   flex-direction: column;
 
   &-header {
-
     &__title {
       @include font-base(24px, 900, 30px);
 
@@ -180,18 +183,18 @@
       color: white;
     }
     &__subtitle {
-      @include font-base(15px, 400, 19px, normal, 'Yantramanav');
+      @include font-base(15px, 400, 19px, normal, "Yantramanav");
 
       margin-bottom: 16px;
       text-align: center;
       color: white;
     }
     &__text {
-      @include font-base(18px, 400, 23px, normal, 'Yantramanav');
+      @include font-base(18px, 400, 23px, normal, "Yantramanav");
 
       margin-bottom: 24px;
       text-align: center;
-      color: #D4D4D4;
+      color: #d4d4d4;
     }
   }
 }
@@ -204,17 +207,17 @@
   flex-direction: column;
   align-items: center;
 
+  &.reward {
+    background: #ad3a24;
+    padding-top: 20px;
+    padding-bottom: 0;
+  }
   &.stake {
-    background: rgba(237, 90, 36, .15);
+    background: rgba(237, 90, 36, 0.15);
   }
   &.claim {
     margin-bottom: 47px;
-    background: #201E23;
-
-    & .button {
-      background: #D4D4D4;
-      color: white;
-    }
+    background: #201e23;
   }
 
   &__uppertitle {
@@ -223,7 +226,7 @@
     margin-bottom: 16px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #D4D4D4;
+    color: #d4d4d4;
   }
 
   &__title {
@@ -236,10 +239,10 @@
   }
 
   &__subtitle {
-    @include font-base(18px, 400, 23px, normal, 'Yantramanav');
+    @include font-base(18px, 400, 23px, normal, "Yantramanav");
 
     margin-bottom: 24px;
-    color: #D4D4D4;
+    color: #d4d4d4;
   }
 
   & .button {
@@ -247,7 +250,7 @@
 
     width: 160px;
     padding: 7px 0;
-    background: #ED5A24;
+    background: #ed5a24;
   }
 }
 
@@ -261,7 +264,7 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #D4D4D4;
+  color: #d4d4d4;
 
   &:first-child {
     margin-right: 44px;

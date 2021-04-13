@@ -12,6 +12,7 @@
       </p>
     </div>
 
+    <reward-card />
     <stake-card />
     <claim-card />
   </div>
@@ -20,10 +21,12 @@
 <script>
 import ClaimCard from "~/components/card/claim-card/ClaimCard";
 import StakeCard from "~/components/card/stake-card/StakeCard";
+import RewardCard from "~/components/card/reward-card/RewardCard";
 export default {
   components: {
     ClaimCard,
-    StakeCard
+    StakeCard,
+    RewardCard,
   },
   name: 'BaseCard',
   props: {
