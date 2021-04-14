@@ -162,7 +162,6 @@ export default {
         this.lpTokenModel.allowance
       ] = await callLpToken(methods);
 
-      console.log(this.lpTokenModel);
       this.approvalFormCom();
     },
     async approve() {
@@ -170,6 +169,7 @@ export default {
       await lpTokenSend("approve", [getLpStakingAddress(), approveValueInWei], {
         from: this.account
       });
+
       await this.getLpTokenData();
     },
     async stake() {
@@ -177,6 +177,7 @@ export default {
       await stakeLpSend("stake", [stakeValueInWei], {
         from: this.account
       });
+
       await this.getLpTokenData();
     }
   }

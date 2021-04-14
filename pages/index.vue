@@ -72,12 +72,12 @@
       </div>
 
       <div class="links">
-        <nuxt-link class="link" to="https://www.gazecoin.io/">
+        <a class="link" href="https://www.gazecoin.io/" target="_blank">
           Staking Rewards
-        </nuxt-link>
-        <nuxt-link class="link" to="https://www.gazecoin.io/">
+        </a>
+        <a class="link" href="https://www.gazecoin.io/" target="_blank">
           What is GazeCoin?
-        </nuxt-link>
+        </a>
       </div>
     </div>
   </div>
