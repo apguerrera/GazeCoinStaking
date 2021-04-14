@@ -12,9 +12,9 @@
       </p>
     </div>
 
-    <reward-card />
-    <stake-card />
-    <claim-card />
+    <reward-card :card="card" />
+    <stake-card :card="card" />
+    <claim-card :card="card" />
   </div>
 </template>
 
@@ -26,18 +26,16 @@ export default {
   components: {
     ClaimCard,
     StakeCard,
-    RewardCard,
+    RewardCard
   },
-  name: 'BaseCard',
+  name: "BaseCard",
   props: {
     card: {
       type: Object,
       required: false
     }
   }
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

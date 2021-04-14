@@ -2,34 +2,83 @@
   <div @click="closeModal()" class="overlay">
     <div @click="stopPropogation" class="modal">
       <h3 class="modal__title">
-        Zap eth
+        Stake
       </h3>
       <div class="modal-body">
-        <input min=0
-               step="0.1"
-               v-model="inputValue"
-               type="number">
+        <input
+          min="0"
+          step="0.1"
+          v-model="inputValue"
+          type="number"
+          @input="approvalFormCom"
+        />
         <div class="arrows">
           <span @click.stop="increase()" class="top-arrow">
-            <svg width="10" height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 -3.93402e-07L9.5 5L0.5 5L5 -3.93402e-07Z" fill="#D4D4D4"/>
+            <svg
+              width="10"
+              height="5"
+              viewBox="0 0 10 5"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 -3.93402e-07L9.5 5L0.5 5L5 -3.93402e-07Z"
+                fill="#D4D4D4"
+              />
             </svg>
           </span>
           <span @click.stop="decrease()" class="bottom-arrow">
-            <svg width="10" height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 5L0.5 0L9.5 5.04736e-07L5 5Z" fill="#D4D4D4"/>
+            <svg
+              width="10"
+              height="5"
+              viewBox="0 0 10 5"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M5 5L0.5 0L9.5 5.04736e-07L5 5Z" fill="#D4D4D4" />
             </svg>
           </span>
         </div>
 
-        <button @click="zapEth" class="modal-body__button btn">
-          Zap eth
+        <button
+          @click="approve"
+          class="modal-body__button btn"
+          :disabled="isApproveDisabled"
+        >
+          Approve
+        </button>
+        <button
+          @click="stake"
+          class="modal-body__button btn"
+          :disabled="isStakeDisabled"
+        >
+          Stake
         </button>
       </div>
       <div @click.stop="closeModal()" class="modal-close">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="19.4247" y="5.98965" width="19" height="2" transform="rotate(135 19.4247 5.98965)" fill="white"/>
-          <rect x="18.0105" y="19.4247" width="19" height="2" transform="rotate(-135 18.0105 19.4247)" fill="white"/>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            x="19.4247"
+            y="5.98965"
+            width="19"
+            height="2"
+            transform="rotate(135 19.4247 5.98965)"
+            fill="white"
+          />
+          <rect
+            x="18.0105"
+            y="19.4247"
+            width="19"
+            height="2"
+            transform="rotate(-135 18.0105 19.4247)"
+            fill="white"
+          />
         </svg>
       </div>
     </div>
@@ -37,121 +86,101 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 import {
-  makeBatchCall as callLpToken,
-} from '@/helpers/contractFunctions/lpToken'
+  sendTransaction as lpTokenSend,
+  makeBatchCall as callLpToken
+} from "@/helpers/contractFunctions/lpToken";
 import {
-  makeBatchCall as callLpStaking,
-  getAddress as getLpStakingAddress,
-  sendTransaction as claimLpRewardSend,
-} from '@/helpers/contractFunctions/lpStaking'
-import { numberToHex, toWei } from '@/helpers/contractFunctions/base'
-import { makeBatchCall as callRewardsContract } from '@/helpers/contractFunctions/rewardsContract'
+  sendTransaction as stakeLpSend,
+  getAddress as getLpStakingAddress
+} from "@/helpers/contractFunctions/lpStaking";
+import { toWei, fromWei } from "@/helpers/contractFunctions/base";
 
 export default {
-  name: 'StakeModal',
+  name: "StakeModal",
   data() {
     return {
-      inputValue: 0.1,
-      lpTokens: 0,
-      lpBalance: 0,
-      lpTokenAllowance: 0,
-      lpStakingModel: {
-        rewards: null,
-        balance: 0,
-        stakedEthTotal: null,
-        lastUpdateTime: null
-      },
-      rewardsModel: {
-        genesisRewardRate: 0,
-        parentRewardRate: 0,
-        lpRewardRate: 0
-      },
-    }
+      inputValue: 0,
+      isApproveDisabled: true,
+      isStakeDisabled: true,
+      lpTokenModel: {
+        tokenBalance: 0,
+        allowance: 0
+      }
+    };
   },
   computed: {
     ...mapGetters({
-      account: 'ethereum/account'
+      account: "ethereum/account"
     })
   },
   async mounted() {
-    await this.getLpStakingData()
-    await this.getLpTokenData()
-    const unixtime = Math.floor(Date.now() / 1000)
-    await this.getRewardsData(unixtime, unixtime + (24 * 60 * 60))
+    await this.getLpTokenData();
   },
   methods: {
-    async getRewardsData (fromTime, toTime) {
-      const methods = [
-        { methodName: 'LPRewards', args: [fromTime, toTime] }
-      ];
-      [
-        this.rewardsModel.genesisRewardRate,
-        this.rewardsModel.parentRewardRate,
-        this.rewardsModel.lpRewardRate
-      ] = await callRewardsContract(methods)
-      console.log('this.rewardsModel', this.rewardsModel);
-    },
     decrease() {
-      if(+this.inputValue > 0) {
-        this.inputValue = parseFloat(this.inputValue) - 1;
+      if (+this.inputValue > 0) {
+        this.inputValue = parseFloat(this.inputValue) - 0.1;
       }
     },
     increase() {
-      this.inputValue = parseFloat(this.inputValue) + 1;
+      this.inputValue = parseFloat(this.inputValue) + 0.1;
     },
     closeModal() {
-      this.$emit('closeModal');
+      this.$emit("closeModal");
     },
-    stopPropogation: function (event) {
+    stopPropogation: function(event) {
       event.stopImmediatePropagation();
     },
-    async zapEth() {
-      const zapEthValueInWei = toWei(parseFloat(this.inputValue))
-      console.log(zapEthValueInWei, 'zapEthValueInWei');
-      console.log(numberToHex(`${zapEthValueInWei}`))
+    approvalFormCom() {
+      this.isApproveDisabled = true;
+      this.isStakeDisabled = true;
 
-      const receipt = await claimLpRewardSend('zapEth', [], { from: this.account, value: numberToHex(`${zapEthValueInWei}`) })
-      console.log('receipt', receipt)
+      const isLowwerThenTokenBalance =
+        +this.inputValue <= +fromWei(this.lpTokenModel.tokenBalance);
+      const isRightAllowance =
+        +this.inputValue > 0 &&
+        +this.inputValue > +fromWei(this.lpTokenModel.allowance);
 
-      if (receipt) {
-        await this.getLpTokenData()
-        this.showZapEthPopup = false
+      if (this.lpTokenModel.tokenBalance > 0) {
+        if (isLowwerThenTokenBalance && isRightAllowance) {
+          this.isApproveDisabled = false;
+        } else {
+          this.isStakeDisabled =
+            +this.inputValue <= 0 || !isLowwerThenTokenBalance;
+        }
       }
     },
-    async getLpStakingData () {
-      console.log('this.lpStakingModel');
+    async getLpTokenData() {
       const methods = [
-        // { methodName: 'stakedEthTotal' },
-        { methodName: 'getStakedBalance', args: [this.account] },
-        { methodName: 'rewardsOwing', args: [this.account] },
-        { methodName: 'lastUpdateTime' }
+        { methodName: "balanceOf", args: [this.account] },
+        { methodName: "allowance", args: [this.account, getLpStakingAddress()] }
       ];
       [
-        // this.lpStakingModel.stakedEthTotal,
-        this.lpStakingModel.balance,
-        this.lpStakingModel.rewards,
-        this.lpStakingModel.lastUpdateTime
-      ] = await callLpStaking(methods)
-      console.log('this.lpStakingModel', this.lpStakingModel);
+        this.lpTokenModel.tokenBalance,
+        this.lpTokenModel.allowance
+      ] = await callLpToken(methods);
+
+      console.log(this.lpTokenModel);
+      this.approvalFormCom();
     },
-    async getLpTokenData () {
-      const methods = [
-        { methodName: 'balanceOf', args: [this.account] },
-        { methodName: 'allowance', args: [this.account, getLpStakingAddress()] }
-      ];
-      [
-        this.lpTokens,
-        this.lpTokenAllowance
-      ] = await callLpToken(methods)
-      console.log('lpTokens', this.lpTokens)
-      console.log('lpTokensAllowance', this.lpTokenAllowance)
+    async approve() {
+      const approveValueInWei = toWei(parseFloat(this.inputValue));
+      await lpTokenSend("approve", [getLpStakingAddress(), approveValueInWei], {
+        from: this.account
+      });
+      await this.getLpTokenData();
     },
+    async stake() {
+      const stakeValueInWei = toWei(parseFloat(this.inputValue));
+      await stakeLpSend("stake", [stakeValueInWei], {
+        from: this.account
+      });
+      await this.getLpTokenData();
+    }
   }
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

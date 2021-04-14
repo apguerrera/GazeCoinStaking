@@ -1,53 +1,58 @@
 <template>
   <div class="card-wrapper stake">
-    <h4 class="card-wrapper__subtitle">
-      {{ lpDailyRewards }} $GAZE / day
-
-    </h4>
-
-    <button @click="openModal()" class="button btn">
+    <h4 class="card-wrapper__subtitle">{{ lpDailyRewards }} $GAZE / day</h4>
+    <button @click="openZapModal()" class="button btn">
       zap eth
     </button>
-    <h3 class="card-wrapper__subtitle"></h3>
-    <stake-modal @closeModal="closeModal()" v-if="isModalOpen" />
-    <h4 class="card-wrapper__subtitle">
-      {{ lpTokenBalance }} LP
-    </h4>
+    <h3 class="card-wrapper__subtitle" />
+    <zap-modal @closeModal="closeZapModal()" v-if="isZapModalOpen" />
 
+    <h4 class="card-wrapper__subtitle">{{ lpTokenBalance }} LP</h4>
     <button
-      @click="stakeLpToken()"
+      @click="openStakeModal()"
       class="button btn"
-      :disabled="lpTokens == 0"
+      :disabled="lpTokenModel.tokenBalance == 0"
     >
       stake
     </button>
+    <h3 class="card-wrapper__subtitle" />
+    <stake-modal @closeModal="closeStakeModal()" v-if="isStakeModalOpen" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import { makeBatchCall as callLpToken } from "@/helpers/contractFunctions/lpToken";
 import {
-  makeBatchCall as callLpStaking,
-  sendTransaction as claimLpRewardSend,
-  getAddress as getLpStakingAddress
-} from "@/helpers/contractFunctions/lpStaking";
+  makeBatchCall as callLpToken,
+  getAddress as getlpTokenAddress
+} from "@/helpers/contractFunctions/lpToken";
 import { makeBatchCall as callRewardsContract } from "@/helpers/contractFunctions/rewardsContract";
+import ZapModal from "~/components/modal/ZapModal";
 import StakeModal from "~/components/modal/StakeModal";
 
 export default {
   components: {
+    ZapModal,
     StakeModal
   },
   name: "StakeCard",
+  props: {
+    card: {
+      type: Object,
+      required: false
+    }
+  },
   data() {
     return {
-      isModalOpen: false,
-      lpTokens: 0, 
-      rewardsModel: {
-        currentWeek:0,
-        lpRewardRate: 0
+      isZapModalOpen: false,
+      isStakeModalOpen: false,
+      lpTokenModel: {
+        tokenBalance: 0
       },
+      rewardsModel: {
+        currentWeek: 0,
+        lpRewardRate: 0
+      }
     };
   },
   computed: {
@@ -55,48 +60,52 @@ export default {
       account: "ethereum/account"
     }),
     lpTokenBalance() {
-      return (this.lpTokens / 10 ** 18).toFixed(6);
+      return (this.lpTokenModel.tokenBalance / 10 ** 18).toFixed(6);
     },
     lpDailyRewards() {
-      return (this.rewardsModel.lpRewardRate * 60 * 24 / 10 ** 18).toFixed(0);
+      return ((this.rewardsModel.lpRewardRate * 60 * 24) / 10 ** 18).toFixed(0);
     }
   },
   async mounted() {
-    await this.getLpTokenBalance();
-    // const unixtime = (Date.now() / 1000).toFixed(0)
-    const unixtime = 1618352872
-    await this.getRewardsData(unixtime - (60), unixtime)
-
-},
+    if (this.card.id != 2) {
+      await this.getLpTokenData();
+      await this.getRewardsData();
+      setInterval(async () => {
+        await this.getLpTokenData();
+        await this.getRewardsData();
+      }, 3000);
+    }
+  },
   methods: {
-    openModal() {
-      this.isModalOpen = true;
+    openZapModal() {
+      this.isZapModalOpen = true;
     },
-    closeModal() {
-      this.isModalOpen = false;
+    closeZapModal() {
+      this.isZapModalOpen = false;
     },
-    async stakeLpToken() {
-      const res = await claimLpRewardSend("stakeAll", [], {
-        from: this.account
-      });
-      console.log(res);
+    openStakeModal() {
+      this.isStakeModalOpen = true;
     },
-    async getLpTokenBalance() {
+    closeStakeModal() {
+      this.isStakeModalOpen = false;
+    },
+    async getLpTokenData() {
       const methods = [{ methodName: "balanceOf", args: [this.account] }];
-      [this.lpTokens] = await callLpToken(methods);
-    }, 
-    async getRewardsData(fromTime, toTime) {
-      const methods = [
-        { methodName: 'getCurrentRewardWeek', args: [] },
-        { methodName: 'LPRewards', args: [fromTime, toTime] }
+      [this.lpTokenModel.tokenBalance] = await callLpToken(methods);
+    },
+    async getRewardsData() {
+      const toTime = (Date.now() / 1000).toFixed(0);
+      const fromTime = toTime - 60;
 
+      const methods = [
+        { methodName: "getCurrentRewardWeek", args: [] },
+        { methodName: "LPRewards", args: [fromTime, toTime] }
       ];
       [
         this.rewardsModel.currentWeek,
         this.rewardsModel.lpRewardRate
-
-      ] = await callRewardsContract(methods)
-    },
+      ] = await callRewardsContract(methods);
+    }
   }
 };
 </script>
