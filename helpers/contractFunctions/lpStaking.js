@@ -20,13 +20,9 @@ const initContractInstance = () => {
 };
 
 export const sendTransaction = async (methodName, args, options) => {
-  console.log(methodName, args, options);
   initContractInstance();
   const method = contractInstance.methods[methodName](...args);
-  console.log("method", method);
-  const trans = await _sendTransaction(method, options);
-  console.log(trans);
-  // return await _sendTransaction(method, options)
+  return await _sendTransaction(method, options);
 };
 
 export const makeBatchCall = async methods => {

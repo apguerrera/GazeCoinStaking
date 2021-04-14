@@ -36,6 +36,12 @@ export default {
     UnstakeModal
   },
   name: "ClaimCard",
+  props: {
+    card: {
+      type: Object,
+      required: false
+    }
+  },
   data() {
     return {
       isModalOpen: false,
@@ -66,10 +72,12 @@ export default {
     }
   },
   async mounted() {
-    await this.getLpData();
-    setInterval(async () => {
+    if (this.card.id != 2) {
       await this.getLpData();
-    }, 3000);
+      setInterval(async () => {
+        await this.getLpData();
+      }, 3000);
+    }
   },
   methods: {
     openModal() {
@@ -87,19 +95,17 @@ export default {
     },
     async getLpData() {
       const methods = [
-        { methodName: "stakedEthTotal" },
+        // { methodName: "stakedEthTotal" },
         { methodName: "getStakedBalance", args: [this.account] },
-        { methodName: "unclaimedRewards", args: [this.account] },
-        { methodName: "lastUpdateTime" }
+        { methodName: "unclaimedRewards", args: [this.account] }
+        // { methodName: "lastUpdateTime" }
       ];
       [
-        this.lpStakingModel.stakedEthTotal,
+        // this.lpStakingModel.stakedEthTotal,
         this.lpStakingModel.balance,
-        this.lpStakingModel.rewards,
-        this.lpStakingModel.lastUpdateTime
+        this.lpStakingModel.rewards
+        // this.lpStakingModel.lastUpdateTime
       ] = await callLpStaking(methods);
-
-      console.log(this.lpStakingModel);
     }
   }
 };

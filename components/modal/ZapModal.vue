@@ -2,7 +2,7 @@
   <div @click="closeModal()" class="overlay">
     <div @click="stopPropogation" class="modal">
       <h3 class="modal__title">
-        Unstake
+        Zap eth
       </h3>
       <div class="modal-body">
         <input min="0" step="0.1" v-model="inputValue" type="number" />
@@ -35,11 +35,11 @@
         </div>
 
         <button
-          @click="unstake"
+          @click="zapEth"
           class="modal-body__button btn"
           :disabled="inputValue <= 0"
         >
-          Unstake
+          Zap eth
         </button>
       </div>
       <div @click.stop="closeModal()" class="modal-close">
@@ -74,11 +74,12 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { sendTransaction as unstakeLpSend } from "@/helpers/contractFunctions/lpStaking";
-import { toWei } from "@/helpers/contractFunctions/base";
+import { sendTransaction as stakeLpSend } from "@/helpers/contractFunctions/lpStaking";
+import { numberToHex, toWei } from "@/helpers/contractFunctions/base";
+import { makeBatchCall as callRewardsContract } from "@/helpers/contractFunctions/rewardsContract";
 
 export default {
-  name: "UnstakeModal",
+  name: "ZapModal",
   data() {
     return {
       inputValue: 0
@@ -90,6 +91,15 @@ export default {
     })
   },
   methods: {
+    async getRewardsData(fromTime, toTime) {
+      const methods = [{ methodName: "LPRewards", args: [fromTime, toTime] }];
+      [
+        this.rewardsModel.genesisRewardRate,
+        this.rewardsModel.parentRewardRate,
+        this.rewardsModel.lpRewardRate
+      ] = await callRewardsContract(methods);
+      console.log("this.rewardsModel", this.rewardsModel);
+    },
     decrease() {
       this.inputValue = Math.max(0, parseFloat(this.inputValue) - 0.1);
     },
@@ -102,10 +112,11 @@ export default {
     stopPropogation: function(event) {
       event.stopImmediatePropagation();
     },
-    async unstake() {
-      const unstakeValueInWei = toWei(parseFloat(this.inputValue));
-      await unstakeLpSend("unstake", [unstakeValueInWei], {
-        from: this.account
+    async zapEth() {
+      const zapEthValueInWei = toWei(parseFloat(this.inputValue));
+      await stakeLpSend("zapEth", [], {
+        from: this.account,
+        value: numberToHex(`${zapEthValueInWei}`)
       });
     }
   }

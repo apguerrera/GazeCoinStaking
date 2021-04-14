@@ -11,6 +11,12 @@ import { makeBatchCall as callRewardsContract } from "@/helpers/contractFunction
 
 export default {
   name: "RewardCard",
+  props: {
+    card: {
+      type: Object,
+      required: false
+    }
+  },
   data() {
     return {
       apyModel: {
@@ -19,7 +25,9 @@ export default {
     };
   },
   async mounted() {
-    await this.getAPYData();
+    if (this.card.id != 2) {
+      await this.getAPYData();
+    }
   },
   methods: {
     async getAPYData() {
