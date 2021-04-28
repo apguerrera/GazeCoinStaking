@@ -1,7 +1,7 @@
 const infuraKey = '06c80c13728d4878a465b5a097a158e7';
 
 module.exports = {
-  rightNetworks: [1, 3, 4, 5, 42],
+  rightNetworks: [1, 3, 5],
   defaultNetwork: 1,
   1: {
     name: 'Ethereum Mainnet',

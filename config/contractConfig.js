@@ -2,7 +2,7 @@
 
 export const access_ctrl = {
   address: {
-    1: "", // main
+    1: "0xC6115aF2198f73C6a9a7445395BE71ca76467405", // main
     3: "0x4Ef975d87CC75bB9db79B719F8DBfFBf542f72d9", // ropsten
     4: "", // rinkeby
     42: "", // kovan
@@ -553,7 +553,7 @@ export const weth = {
 
 export const lp_token = {
   address: {
-    1: "", // main
+    1: "0x1845d8d12846d7d7c6908bc5df48cfe29a7283c7", // main
     3: "0x89236A06a5FAa558F01c74F4fFdbe8FF976afFD9", // ropsten
     4: "", // rinkeby
     42: "", // kovan
@@ -946,7 +946,7 @@ export const lp_token = {
 
 export const rewards = {
   address: {
-    1: "", // main
+    1: "0x11A7137a56F2F43D47D28C1F13c0bEAEE9e971E3", // main
     3: "0x629e712A6d4eA2154B2E2dC077a2E86E79E1550d", // ropsten
     4: "", // rinkeby
     42: "", // kovan
@@ -1243,7 +1243,7 @@ export const rewards = {
 
 export const lpStaking = {
   address: {
-    1: "", // main
+    1: "0x66A3c1809a53Fb3aD938BF9C1E96Ee84AC0DA4a7", // main
     3: "0xd65Df4760A43Ae54C723123c05ad1302d453fF1a", // ropsten
     4: "", // rinkeby
     42: "", // kovan
