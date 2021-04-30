@@ -73,6 +73,15 @@
   }
 }
 
+.main-title {
+  width: 607px;
+  height: 49px;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
 .btn {
   border: none;
   letter-spacing: 0.16em;
@@ -286,6 +295,15 @@
 
 /* Small devices (landscape phones, 576px and up)*/
 @media (min-width: 576px) and (max-width: 767.98px) {
+  .main-title {
+    width: 607px;
+    height: 49px;
+    svg {
+      width: 100%;
+      height: 100%;
+      transform: scale(0.5);
+    }
+  }
   .cards-wrapper {
     & .card:first-child {
       margin-right: 12px;
@@ -298,6 +316,15 @@
 
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
+  .main-title {
+    width: 607px;
+    height: 49px;
+    svg {
+      width: 100%;
+      height: 100%;
+      transform: scale(0.4);
+    }
+  }
   .cards-wrapper {
     flex-direction: column;
     align-items: center;
