@@ -1,13 +1,25 @@
 <template>
   <div class="card-wrapper stake">
-    <h4 class="card-wrapper__subtitle">{{ lpDailyRewards }} $GAZE / day</h4>
+    <h4 class="card-wrapper__subtitle">Total Staked in Pool: {{ lpStakedEth }} ETH</h4>
+    <h4 class="card-wrapper__subtitle">Pool Rewards: {{ lpDailyRewards }} $GAZE / day</h4>
+
     <button @click="openZapModal()" class="button btn">
       zap eth
     </button>
     <h3 class="card-wrapper__subtitle" />
     <zap-modal @closeModal="closeZapModal()" v-if="isZapModalOpen" />
 
-    <h4 class="card-wrapper__subtitle">{{ lpTokenBalance }} LP</h4>
+     <h4 class="card-wrapper__subtitle"> - OR - </h4>
+    <a href="https://app.sushi.com/add/ETH/0x4AC00f287f36A6Aad655281fE1cA6798C9cb727b" target="_blank">
+    <button
+      class="button btn"
+    >
+      Add Liquidity
+    </button>    </a>
+
+      <h3 class="card-wrapper__subtitle" />
+
+    <h4 class="card-wrapper__subtitle">{{ lpTokenBalance }} SLP</h4>
     <button
       @click="openStakeModal()"
       class="button btn"
@@ -15,6 +27,8 @@
     >
       stake
     </button>
+
+
     <h3 class="card-wrapper__subtitle" />
     <stake-modal @closeModal="closeStakeModal()" v-if="isStakeModalOpen" />
   </div>
@@ -51,6 +65,7 @@ export default {
       },
       rewardsModel: {
         currentWeek: 0,
+        lpStakedEth: 0,
         lpRewardRate: 0
       }
     };
@@ -64,6 +79,9 @@ export default {
     },
     lpDailyRewards() {
       return ((this.rewardsModel.lpRewardRate * 60 * 24) / 10 ** 18).toFixed(0);
+    },
+    lpStakedEth() {
+      return ((this.rewardsModel.lpStakedEth ) / 10 ** 18).toFixed(2);
     }
   },
   async mounted() {
@@ -72,8 +90,10 @@ export default {
       await this.getRewardsData();
       setInterval(async () => {
         await this.getLpTokenData();
-        await this.getRewardsData();
       }, 3000);
+      // setInterval(async () => {
+      //   await this.getRewardsData();
+      // }, 10000);
     }
   },
   methods: {
@@ -99,14 +119,18 @@ export default {
 
       const methods = [
         { methodName: "getCurrentRewardWeek", args: [] },
+        { methodName: "getLpStakedEthTotal", args: [] },
         { methodName: "LPRewards", args: [fromTime, toTime] }
       ];
       [
         this.rewardsModel.currentWeek,
+        this.rewardsModel.lpStakedEth,
         this.rewardsModel.lpRewardRate
       ] = await callRewardsContract(methods);
     }
   }
+
+  
 };
 </script>
 

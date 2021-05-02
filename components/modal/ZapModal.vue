@@ -37,7 +37,7 @@
         <button
           @click="zapEth"
           class="modal-body__button btn"
-          :disabled="inputValue <= 0"
+          :disabled="inputValue < 0.01"
         >
           Zap eth
         </button>
@@ -114,7 +114,7 @@ export default {
     },
     async zapEth() {
       const zapEthValueInWei = toWei(parseFloat(this.inputValue));
-      await stakeLpSend("zapEth", [], {
+      await stakeLpSend("addLiquidityETHOnly", [this.account], {
         from: this.account,
         value: numberToHex(`${zapEthValueInWei}`)
       });

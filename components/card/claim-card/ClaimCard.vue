@@ -14,7 +14,7 @@
     <h3 class="card-wrapper__subtitle"></h3>
 
     <h4 class="card-wrapper__subtitle" :class="{ 'text-grey': lpBalance == 0 }">
-      {{ lpBalance }} LP
+      {{ lpBalance }} SLP
     </h4>
     <unstake-modal @closeModal="closeModal()" v-if="isModalOpen" />
     <button @click="openModal()" class="button btn" :disabled="lpBalance == 0">
@@ -76,7 +76,7 @@ export default {
       await this.getLpData();
       setInterval(async () => {
         await this.getLpData();
-      }, 3000);
+      }, 6000);
     }
   },
   methods: {

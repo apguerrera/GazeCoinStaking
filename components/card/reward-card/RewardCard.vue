@@ -1,7 +1,7 @@
 <template>
   <div class="card-wrapper reward">
     <h2 class="card-wrapper__title">
-      {{ ((apyModel.lpDaily * 365) / 10 ** 18).toFixed(2) }}% APY
+      {{ ((apyModel.lpDaily ) / 10 ** 18).toFixed(2) }}% APY
     </h2>
   </div>
 </template>

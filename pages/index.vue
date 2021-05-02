@@ -49,10 +49,13 @@
 
       <div class="links">
         <a class="link" href="https://www.gazecoin.io/" target="_blank">
-          Staking Rewards
+          Gazecoin.io
         </a>
-        <a class="link" href="https://www.gazecoin.io/" target="_blank">
-          What is GazeCoin?
+        <a class="link" href="https://www.dextools.io/app/sushiswap/pair-explorer/0x1845d8d12846d7d7c6908bc5df48cfe29a7283c7" target="_blank">
+          Dextools
+        </a> - 
+        <a class="link" href="https://app.sushi.com/swap?outputCurrency=0x4ac00f287f36a6aad655281fe1ca6798c9cb727b" target="_blank">
+          SUSHISWAP
         </a>
       </div>
     </div>
