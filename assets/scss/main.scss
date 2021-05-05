@@ -73,15 +73,6 @@
   }
 }
 
-.main-title {
-  width: 607px;
-  height: 49px;
-  svg {
-    width: 100%;
-    height: 100%;
-  }
-}
-
 .btn {
   border: none;
   letter-spacing: 0.16em;
@@ -107,8 +98,10 @@
   &-image {
     position: relative;
     width: 100%;
-    margin-bottom: 54px;
+    height: 130px;
+    margin-bottom: 94px;
     display: flex;
+    justify-content: center;
 
     & img {
       width: 100%;
@@ -116,45 +109,19 @@
   }
 
   &-title {
-    position: absolute;
-    left: calc(50% - 305px);
-    bottom: -24px;
     display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 50px;
 
     & svg {
-      & path {
-        fill: transparent;
-      }
-
       &:nth-child(1) {
         z-index: 10;
-        opacity: 1;
-
-        & path {
-          fill: white;
-        }
       }
 
       &:nth-child(2) {
-        position: absolute;
-        bottom: 21px;
-        z-index: 9;
-        stroke: #ed5a24;
-        opacity: 0.9;
-      }
-      &:nth-child(3) {
-        position: absolute;
-        bottom: 43px;
-        z-index: 8;
-        stroke: #ed5a24;
-        opacity: 0.7;
-      }
-      &:nth-child(4) {
-        position: absolute;
-        bottom: 64px;
-        z-index: 7;
-        stroke: #ed5a24;
-        opacity: 0.5;
+        z-index: 10;
+        display: none;
       }
     }
   }
@@ -183,6 +150,7 @@
   flex-direction: column;
 
   &-header {
+    margin-bottom: 12px;
     &__title {
       @include font-base(24px, 900, 30px);
 
@@ -204,6 +172,7 @@
       margin-bottom: 24px;
       text-align: center;
       color: #d4d4d4;
+      height: 82px;
     }
   }
 }
@@ -289,19 +258,28 @@
     }
   }
   .card {
-    width: 35%;
+    width: 40%;
   }
 }
 
 /* Small devices (landscape phones, 576px and up)*/
 @media (min-width: 576px) and (max-width: 767.98px) {
-  .main-title {
-    width: 607px;
-    height: 49px;
-    svg {
-      width: 100%;
-      height: 100%;
-      transform: scale(0.5);
+  .main {
+    &-title {
+      display: flex;
+      justify-content: center;
+      position: absolute;
+
+      & svg {
+        &:nth-child(1) {
+          z-index: 10;
+        }
+
+        &:nth-child(2) {
+          z-index: 10;
+          display: none;
+        }
+      }
     }
   }
   .cards-wrapper {
@@ -311,18 +289,51 @@
   }
   .card {
     width: 45%;
+    &-header {
+      &__title {
+        height: 60px;
+      }
+      &__text {
+        height: 112px;
+      }
+    }
   }
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
-  .main-title {
-    width: 607px;
-    height: 49px;
-    svg {
-      width: 100%;
-      height: 100%;
-      transform: scale(0.4);
+  .header {
+    &-coin {
+      position: absolute;
+      top: 100px;
+      width: 114px;
+      height: 114px;
+      z-index: 100;
+      display: flex;
+    }
+  }
+  .main {
+    &-image {
+      height: 166px;
+      margin-bottom: 144px;
+    }
+    &-title {
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      top: 100px;
+
+      & svg {
+        &:nth-child(1) {
+          z-index: 10;
+          display: none;
+        }
+
+        &:nth-child(2) {
+          z-index: 10;
+          display: flex;
+        }
+      }
     }
   }
   .cards-wrapper {
@@ -335,10 +346,5 @@
   }
   .card {
     width: 90%;
-  }
-
-  .main-title {
-    width: 90%;
-    left: calc(5%);
   }
 }
